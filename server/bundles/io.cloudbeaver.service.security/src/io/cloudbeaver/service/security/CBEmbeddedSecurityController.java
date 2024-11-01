@@ -126,8 +126,9 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
         if (CommonUtils.isEmpty(userId)) {
             throw new DBCException("Empty user name is not allowed");
         }
+        userId = userId.toLowerCase(); // creating new users only with lowercase
         if (isSubjectExists(userId)) {
-            throw new DBCException("User or team '" + userId.toLowerCase() + "' already exists");
+            throw new DBCException("User or team '" + userId + "' already exists");
         }
         log.debug("Create user: " + userId);
         try (Connection dbCon = database.openConnection()) {
@@ -2455,11 +2456,18 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
 
             userId = authProvider.isCaseInsensitive() ? userIdFromCredentials.toLowerCase() : userIdFromCredentials;
             if (!isSubjectExists(userId)) {
-                createUser(userId,
-                    Map.of(),
-                    true,
-                    resolveUserAuthRole(null, authRole)
-                );
+                log.debug("Create user: " + userId);
+                try (Connection dbCon = database.openConnection()) {
+                    createUser(
+                        dbCon,
+                        userId,
+                        Map.of(),
+                        true,
+                        resolveUserAuthRole(null, authRole)
+                    );
+                } catch (SQLException e) {
+                    throw new DBException("Error saving user in database", e);
+                }
             }
             setUserCredentials(userId, authProvider.getId(), userCredentials);
         } else if (userId == null) {
