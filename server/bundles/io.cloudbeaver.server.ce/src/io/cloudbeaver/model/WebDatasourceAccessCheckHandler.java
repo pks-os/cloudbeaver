@@ -20,14 +20,13 @@ package io.cloudbeaver.model;
 import io.cloudbeaver.model.config.CBAppConfig;
 import io.cloudbeaver.model.utils.ConfigurationUtils;
 import io.cloudbeaver.server.CBApplication;
-import io.cloudbeaver.utils.WebAppUtils;
+import io.cloudbeaver.utils.ServletAppUtils;
 import org.jkiss.dbeaver.model.connection.DBPDriver;
 
-//TODO move to a separate CBApplication plugin
 public class WebDatasourceAccessCheckHandler extends BaseDatasourceAccessCheckHandler {
     @Override
     protected boolean isDriverDisabled(DBPDriver driver) {
-        if (!WebAppUtils.getWebApplication().isMultiuser()) {
+        if (!ServletAppUtils.getServletApplication().isMultiuser()) {
             return false;
         }
         CBAppConfig config = CBApplication.getInstance().getAppConfiguration();

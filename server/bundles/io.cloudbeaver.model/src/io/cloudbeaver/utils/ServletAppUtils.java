@@ -19,8 +19,8 @@ package io.cloudbeaver.utils;
 import io.cloudbeaver.DBWebException;
 import io.cloudbeaver.WebProjectImpl;
 import io.cloudbeaver.auth.NoAuthCredentialsProvider;
-import io.cloudbeaver.model.app.WebApplication;
-import io.cloudbeaver.model.app.WebAuthApplication;
+import io.cloudbeaver.model.app.ServletApplication;
+import io.cloudbeaver.model.app.ServletAuthApplication;
 import io.cloudbeaver.model.session.WebSession;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,8 +41,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class WebAppUtils {
-    private static final Log log = Log.getLog(WebAppUtils.class);
+public class ServletAppUtils {
+    private static final Log log = Log.getLog(ServletAppUtils.class);
 
     public static String getRelativePath(String path, String curDir) {
         return getRelativePath(path, Path.of(curDir));
@@ -55,19 +55,19 @@ public class WebAppUtils {
         return curDir.resolve(path).toAbsolutePath().toString();
     }
 
-    public static WebApplication getWebApplication() {
-        return (WebApplication) DBWorkbench.getPlatform().getApplication();
+    public static ServletApplication getServletApplication() {
+        return (ServletApplication) DBWorkbench.getPlatform().getApplication();
     }
 
-    public static WebAuthApplication getWebAuthApplication() throws DBException {
-        WebApplication application = getWebApplication();
-        if (!WebAuthApplication.class.isAssignableFrom(application.getClass())) {
+    public static ServletAuthApplication getWebAuthApplication() throws DBException {
+        ServletApplication application = getServletApplication();
+        if (!ServletAuthApplication.class.isAssignableFrom(application.getClass())) {
             throw new DBException("The current application doesn't contain authorization configuration");
         }
-        return  (WebAuthApplication) application;
+        return (ServletAuthApplication) application;
     }
 
-    public static SMAuthenticationManager getAuthManager(WebApplication application) throws DBException {
+    public static SMAuthenticationManager getAuthManager(ServletApplication application) throws DBException {
         var smController = application.createSecurityController(new NoAuthCredentialsProvider());
         if (!SMAuthenticationManager.class.isAssignableFrom(smController.getClass())) {
             throw new DBException("The current application cannot be used for authorization");
@@ -173,7 +173,7 @@ public class WebAppUtils {
     }
 
     @NotNull
-    public static StringBuilder getAuthApiPrefix(WebAuthApplication webAuthApplication, String serviceId) {
+    public static StringBuilder getAuthApiPrefix(ServletAuthApplication webAuthApplication, String serviceId) {
         String authUrl = removeSideSlashes(webAuthApplication.getAuthServiceURL());
         StringBuilder apiPrefix = new StringBuilder(authUrl);
         apiPrefix.append("/").append(serviceId).append("/");
@@ -190,7 +190,7 @@ public class WebAppUtils {
             sessionCookie.setMaxAge((int) (maxSessionIdleTime / 1000));
         }
 
-        String path = getWebApplication().getServerConfiguration().getRootURI();
+        String path = getServletApplication().getServerConfiguration().getRootURI();
 
         if (sameSite != null) {
             if (!request.isSecure()) {
@@ -223,7 +223,7 @@ public class WebAppUtils {
     }
 
     public static String getGlobalProjectId() {
-        String globalConfigurationName = getWebApplication().getDefaultProjectName();
+        String globalConfigurationName = getServletApplication().getDefaultProjectName();
         return RMProjectType.GLOBAL.getPrefix() + "_" + globalConfigurationName;
     }
 
@@ -273,9 +273,9 @@ public class WebAppUtils {
 
     @NotNull
     public static String getFullServerUrl() {
-        WebApplication application = WebAppUtils.getWebApplication();
+        ServletApplication application = ServletAppUtils.getServletApplication();
         return Stream.of(application.getServerURL(), application.getRootURI())
-            .map(WebAppUtils::removeSideSlashes)
+            .map(ServletAppUtils::removeSideSlashes)
             .filter(CommonUtils::isNotEmpty)
             .collect(Collectors.joining("/"));
     }

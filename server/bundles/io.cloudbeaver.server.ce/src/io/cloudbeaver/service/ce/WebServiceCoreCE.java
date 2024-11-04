@@ -14,24 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.cloudbeaver.service.ce;
 
-package io.cloudbeaver.model.app;
+import io.cloudbeaver.model.WebServerConfig;
+import io.cloudbeaver.server.CBApplication;
 
-import io.cloudbeaver.auth.CBAuthConstants;
-import org.jkiss.dbeaver.DBException;
+public class WebServiceCoreCE implements DBWServiceCoreCE {
 
-import java.util.List;
-
-public interface WebAuthApplication extends WebApplication {
-    WebAuthConfiguration getAuthConfiguration();
-
-    String getAuthServiceURL();
-
-    default long getMaxSessionIdleTime() {
-        return CBAuthConstants.MAX_SESSION_IDLE_TIME;
+    @Override
+    public WebServerConfig getServerConfig() {
+        return new WebServerConfig(CBApplication.getInstance());
     }
 
-    void flushConfiguration() throws DBException;
-
-    String getDefaultAuthRole();
 }

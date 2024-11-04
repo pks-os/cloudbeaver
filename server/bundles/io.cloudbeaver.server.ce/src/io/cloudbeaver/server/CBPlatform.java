@@ -21,7 +21,7 @@ import io.cloudbeaver.auth.NoAuthCredentialsProvider;
 import io.cloudbeaver.server.jobs.SessionStateJob;
 import io.cloudbeaver.server.jobs.WebDataSourceMonitorJob;
 import io.cloudbeaver.server.jobs.WebSessionMonitorJob;
-import io.cloudbeaver.service.session.WebSessionManager;
+import io.cloudbeaver.service.session.CBSessionManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.jkiss.code.NotNull;
@@ -47,17 +47,15 @@ import java.util.stream.Collectors;
 /**
  * CBPlatform
  */
-public class CBPlatform extends BaseGQLPlatform {
+public class CBPlatform extends BaseWebPlatform {
 
     // The plug-in ID
     public static final String PLUGIN_ID = "io.cloudbeaver.server"; //$NON-NLS-1$
 
     private static final Log log = Log.getLog(CBPlatform.class);
-    public static final String TEMP_FILE_FOLDER = "temp-sql-upload-files";
-    public static final String TEMP_FILE_IMPORT_FOLDER = "temp-import-files";
 
     @Nullable
-    private static GQLApplicationAdapter application = null;
+    private static CBApplication<?> application = null;
 
     private WebServerPreferenceStore preferenceStore;
     protected final List<DBPDriver> applicableDrivers = new ArrayList<>();
@@ -69,7 +67,7 @@ public class CBPlatform extends BaseGQLPlatform {
     protected CBPlatform() {
     }
 
-    public static void setApplication(@NotNull GQLApplicationAdapter application) {
+    public static void setApplication(@NotNull CBApplication<?> application) {
         CBPlatform.application = application;
     }
 
@@ -86,13 +84,11 @@ public class CBPlatform extends BaseGQLPlatform {
     }
 
     protected void scheduleServerJobs() {
-        if (getSessionManager() instanceof WebSessionManager webSessionManager) {
-            new WebSessionMonitorJob(this, webSessionManager)
-                .scheduleMonitor();
+        new WebSessionMonitorJob(this, getSessionManager())
+            .scheduleMonitor();
 
-            new SessionStateJob(this, webSessionManager)
-                .scheduleMonitor();
-        }
+        new SessionStateJob(this, getSessionManager())
+            .scheduleMonitor();
 
         new WebDataSourceMonitorJob(this, getSessionManager())
             .scheduleMonitor();
@@ -124,7 +120,7 @@ public class CBPlatform extends BaseGQLPlatform {
 
     @NotNull
     @Override
-    public GQLApplicationAdapter getApplication() {
+    public WebApplication getApplication() {
         return application;
     }
 
@@ -144,7 +140,7 @@ public class CBPlatform extends BaseGQLPlatform {
         return false;
     }
 
-    public AppWebSessionManager getSessionManager() {
+    public CBSessionManager getSessionManager() {
         return application.getSessionManager();
     }
 

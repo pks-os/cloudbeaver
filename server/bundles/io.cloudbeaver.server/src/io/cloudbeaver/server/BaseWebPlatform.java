@@ -17,13 +17,13 @@
 package io.cloudbeaver.server;
 
 import io.cloudbeaver.DBWConstants;
-import io.cloudbeaver.model.app.WebApplication;
 import org.eclipse.core.runtime.Plugin;
 import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.Log;
 import org.jkiss.dbeaver.model.DBConstants;
 import org.jkiss.dbeaver.model.app.DBACertificateStorage;
 import org.jkiss.dbeaver.model.app.DBPWorkspace;
+import org.jkiss.dbeaver.model.connection.DBPDriver;
 import org.jkiss.dbeaver.model.impl.app.DefaultCertificateStorage;
 import org.jkiss.dbeaver.model.qm.QMRegistry;
 import org.jkiss.dbeaver.model.qm.QMUtils;
@@ -40,10 +40,13 @@ import org.jkiss.utils.StandardConstants;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
-public abstract class BaseGQLPlatform extends BasePlatformImpl {
-    private static final Log log = Log.getLog(BaseGQLPlatform.class);
+public abstract class BaseWebPlatform extends BasePlatformImpl {
+    private static final Log log = Log.getLog(BaseWebPlatform.class);
     public static final String BASE_TEMP_DIR = "dbeaver";
+    public static final String TEMP_FILE_FOLDER = "temp-sql-upload-files";
+    public static final String TEMP_FILE_IMPORT_FOLDER = "temp-import-files";
 
     private Path tempFolder;
 
@@ -58,7 +61,7 @@ public abstract class BaseGQLPlatform extends BasePlatformImpl {
         SecurityProviderUtils.registerSecurityProvider();
 
         // Register properties adapter
-        this.workspace = new WebGlobalWorkspace(this, (WebApplication) getApplication());
+        this.workspace = new WebGlobalWorkspace(this, getApplication());
         this.workspace.initializeProjects();
         QMUtils.initApplication(this);
 
@@ -129,6 +132,10 @@ public abstract class BaseGQLPlatform extends BasePlatformImpl {
     @NotNull
     public abstract WebApplication getApplication();
 
+    public abstract WebAppSessionManager getSessionManager();
+
+    protected abstract void scheduleServerJobs();
+
     @Override
     public synchronized void dispose() {
         super.dispose();
@@ -158,4 +165,5 @@ public abstract class BaseGQLPlatform extends BasePlatformImpl {
         return queryManager;
     }
 
+    public abstract List<DBPDriver> getApplicableDrivers();
 }

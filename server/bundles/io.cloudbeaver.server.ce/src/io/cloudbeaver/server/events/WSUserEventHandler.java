@@ -17,7 +17,7 @@
 package io.cloudbeaver.server.events;
 
 import io.cloudbeaver.server.CBPlatform;
-import io.cloudbeaver.service.session.WebSessionManager;
+import io.cloudbeaver.service.session.CBSessionManager;
 import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.model.websocket.WSEventHandler;
 import org.jkiss.dbeaver.model.websocket.event.WSAbstractEvent;
@@ -33,10 +33,9 @@ public class WSUserEventHandler<EVENT extends WSAbstractEvent> implements WSEven
             return;
         }
         var appSessionManager = CBPlatform.getInstance().getSessionManager();
-        if (!(appSessionManager instanceof WebSessionManager)) {
+        if (!(appSessionManager instanceof CBSessionManager sessionManager)) {
             return;
         }
-        var sessionManager = (WebSessionManager) appSessionManager;
         switch (eventType) {
             case CLOSE_USER_SESSIONS:
                 if (event instanceof WSUserCloseSessionsEvent closeSessionsEvent) {

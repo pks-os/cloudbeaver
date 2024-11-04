@@ -14,19 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.cloudbeaver.server;
+package io.cloudbeaver.service.ce;
 
-import org.jkiss.dbeaver.runtime.ui.console.ConsoleUserInterface;
+import io.cloudbeaver.DBWebException;
+import io.cloudbeaver.server.CBPlatform;
+import io.cloudbeaver.service.DBWBindingContext;
+import io.cloudbeaver.service.WebServiceBindingBase;
 
 /**
- * The activator class controls the plug-in life cycle
+ * Web service implementation
  */
-public class CBPlatformUI extends ConsoleUserInterface {
+public class WebServiceBindingCoreCE extends WebServiceBindingBase<DBWServiceCoreCE> {
 
-    public static final CBPlatformUI INSTANCE = new CBPlatformUI();
+    public WebServiceBindingCoreCE() {
+        super(DBWServiceCoreCE.class, new WebServiceCoreCE(), "schema/service.core.graphqls");
+    }
 
-    protected void initialize() {
-        // just a placeholder for injection
+    @Override
+    public void bindWiring(DBWBindingContext model) throws DBWebException {
+        CBPlatform platform = CBPlatform.getInstance();
+        model.getQueryType()
+        ;
+
     }
 
 }

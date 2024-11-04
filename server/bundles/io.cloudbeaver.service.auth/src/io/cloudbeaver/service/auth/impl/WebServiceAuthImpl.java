@@ -21,7 +21,7 @@ import io.cloudbeaver.WebServiceUtils;
 import io.cloudbeaver.auth.SMSignOutLinkProvider;
 import io.cloudbeaver.auth.provider.local.LocalAuthProvider;
 import io.cloudbeaver.model.WebPropertyInfo;
-import io.cloudbeaver.model.app.WebAppConfiguration;
+import io.cloudbeaver.model.app.ServletAppConfiguration;
 import io.cloudbeaver.model.session.WebAuthInfo;
 import io.cloudbeaver.model.session.WebSession;
 import io.cloudbeaver.model.session.WebSessionAuthProcessor;
@@ -190,7 +190,7 @@ public class WebServiceAuthImpl implements DBWServiceAuth {
     @Override
     public WebUserInfo activeUser(@NotNull WebSession webSession) throws DBWebException {
         if (webSession.getUser() == null) {
-            WebAppConfiguration appConfiguration = webSession.getApplication().getAppConfiguration();
+            ServletAppConfiguration appConfiguration = webSession.getApplication().getAppConfiguration();
             if (!appConfiguration.isAnonymousAccessEnabled()) {
                 return null;
             }

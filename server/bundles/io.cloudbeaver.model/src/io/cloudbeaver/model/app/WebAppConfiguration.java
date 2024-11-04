@@ -16,40 +16,32 @@
  */
 package io.cloudbeaver.model.app;
 
-import org.jkiss.code.NotNull;
-import org.jkiss.code.Nullable;
-
-import java.util.Map;
+import org.jkiss.dbeaver.model.navigator.DBNBrowseSettings;
+import org.jkiss.dbeaver.registry.DataSourceNavigatorSettings;
 
 /**
  * Application configuration
  */
-public interface WebAppConfiguration {
-    String getAnonymousUserTeam();
+public interface WebAppConfiguration extends ServletAppConfiguration {
+    DataSourceNavigatorSettings.Preset PRESET_WEB = new DataSourceNavigatorSettings.Preset("web",
+        "Web",
+        "Default view");
 
-    boolean isAnonymousAccessEnabled();
+    DBNBrowseSettings getDefaultNavigatorSettings();
 
-    @Nullable
-    <T> T getResourceQuota(String quotaId);
+    boolean isPublicCredentialsSaveEnabled();
 
-    String getDefaultUserTeam();
+    boolean isAdminCredentialsSaveEnabled();
 
-    <T> T getPluginOption(@NotNull String pluginId, @NotNull String option);
+    default boolean isRedirectOnFederatedAuth() {
+        return false;
+    }
 
-    Map<String, Object> getPluginConfig(@NotNull String pluginId, boolean create);
-
-    boolean isResourceManagerEnabled();
-
-    boolean isFeaturesEnabled(String[] requiredFeatures);
-
-    boolean isFeatureEnabled(String id);
-
-    @NotNull
-    default String[] getEnabledFeatures() {
+    default String[] getDisabledBetaFeatures() {
         return new String[0];
     }
 
-    default boolean isSupportsCustomConnections() {
-        return true;
+    default String[] getEnabledAuthProviders() {
+        return new String[0];
     }
 }

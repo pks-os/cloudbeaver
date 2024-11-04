@@ -19,7 +19,8 @@ package io.cloudbeaver.server.jetty;
 import io.cloudbeaver.model.config.CBServerConfig;
 import io.cloudbeaver.registry.WebServiceRegistry;
 import io.cloudbeaver.server.CBApplication;
-import io.cloudbeaver.server.GQLApplicationAdapter;
+import io.cloudbeaver.server.CBConstants;
+import io.cloudbeaver.server.WebApplication;
 import io.cloudbeaver.server.graphql.GraphQLEndpoint;
 import io.cloudbeaver.server.servlets.CBImageServlet;
 import io.cloudbeaver.server.servlets.CBStaticServlet;
@@ -104,7 +105,8 @@ public class CBJettyServer {
                     "static", new CBStaticServlet(Path.of(serverConfiguration.getContentRoot()))
                 );
                 staticServletHolder.setInitParameter("dirAllowed", "false");
-                staticServletHolder.setInitParameter("cacheControl", "public, max-age=" + CBStaticServlet.STATIC_CACHE_SECONDS);
+                staticServletHolder.setInitParameter("cacheControl",
+                    "public, max-age=" + CBConstants.STATIC_CACHE_SECONDS);
                 servletContextHandler.addServlet(staticServletHolder, "/");
 
                 if (Files.isSymbolicLink(contentRootPath)) {
@@ -218,7 +220,7 @@ public class CBJettyServer {
 
     public static void initSessionManager(
         long maxIdleTime,
-        @NotNull GQLApplicationAdapter application,
+        @NotNull WebApplication application,
         @NotNull Server server,
         @NotNull ServletContextHandler servletContextHandler
     ) {

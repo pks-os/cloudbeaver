@@ -21,7 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.cloudbeaver.DBWConstants;
 import io.cloudbeaver.auth.*;
-import io.cloudbeaver.model.app.WebAuthApplication;
+import io.cloudbeaver.model.app.ServletAuthApplication;
 import io.cloudbeaver.model.app.WebAuthConfiguration;
 import io.cloudbeaver.model.config.SMControllerConfiguration;
 import io.cloudbeaver.registry.WebAuthProviderDescriptor;
@@ -68,7 +68,7 @@ import java.util.stream.Collectors;
 /**
  * Server controller
  */
-public class CBEmbeddedSecurityController<T extends WebAuthApplication>
+public class CBEmbeddedSecurityController<T extends ServletAuthApplication>
     implements SMAdminController, SMAuthenticationManager {
 
     private static final Log log = Log.getLog(CBEmbeddedSecurityController.class);
@@ -1182,6 +1182,7 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
         if (CommonUtils.isEmpty(teamId)) {
             throw new DBCException("Empty team name is not allowed");
         }
+        teamId = teamId.toLowerCase();
         if (isSubjectExists(teamId)) {
             throw new DBCException("User or team '" + teamId + "' already exists");
         }

@@ -19,8 +19,8 @@ package io.cloudbeaver.model;
 import io.cloudbeaver.model.config.PasswordPolicyConfiguration;
 import io.cloudbeaver.registry.WebServiceDescriptor;
 import io.cloudbeaver.registry.WebServiceRegistry;
-import io.cloudbeaver.server.CBApplication;
 import io.cloudbeaver.server.CBPlatform;
+import io.cloudbeaver.server.WebApplication;
 import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.navigator.DBNBrowseSettings;
@@ -39,9 +39,9 @@ import java.util.Map;
  */
 public class WebServerConfig {
 
-    private final CBApplication application;
+    private final WebApplication application;
 
-    public WebServerConfig(CBApplication application) {
+    public WebServerConfig(WebApplication application) {
         this.application = application;
     }
 
@@ -89,16 +89,6 @@ public class WebServerConfig {
     @Property
     public boolean isSupportsCustomConnections() {
         return application.getAppConfiguration().isSupportsCustomConnections();
-    }
-
-    @Property
-    public boolean isSupportsConnectionBrowser() {
-        return application.getAppConfiguration().isSupportsConnectionBrowser();
-    }
-
-    @Property
-    public boolean isSupportsWorkspaces() {
-        return application.getAppConfiguration().isSupportsUserWorkspaces();
     }
 
     @Property

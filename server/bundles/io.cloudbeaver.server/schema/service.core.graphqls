@@ -135,7 +135,7 @@ type ServerConfig {
     anonymousAccessEnabled: Boolean!
     supportsCustomConnections: Boolean!
     supportsConnectionBrowser: Boolean!
-    supportsWorkspaces: Boolean!
+    supportsWorkspaces: Boolean! @deprecated # unused
     resourceManagerEnabled: Boolean!
 
     publicCredentialsSaveEnabled: Boolean!

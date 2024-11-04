@@ -22,7 +22,7 @@ import io.cloudbeaver.model.session.WebSession;
 import io.cloudbeaver.server.CBApplication;
 import io.cloudbeaver.server.CBPlatform;
 import io.cloudbeaver.service.security.SMUtils;
-import io.cloudbeaver.utils.WebAppUtils;
+import io.cloudbeaver.utils.ServletAppUtils;
 import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.Log;
@@ -103,7 +103,7 @@ public class WSObjectPermissionUpdatedEventHandler extends WSDefaultEventHandler
             List<String> dataSources = List.of(dataSourceId);
             WebSessionGlobalProjectImpl project = webSession.getGlobalProject();
             if (project == null) {
-                log.error("Project " + WebAppUtils.getGlobalProjectId() +
+                log.error("Project " + ServletAppUtils.getGlobalProjectId() +
                     " is not found in session " + activeUserSession.getSessionId());
                 return;
             }

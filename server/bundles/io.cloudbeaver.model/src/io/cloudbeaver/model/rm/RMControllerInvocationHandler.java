@@ -16,7 +16,7 @@
  */
 package io.cloudbeaver.model.rm;
 
-import io.cloudbeaver.model.app.WebApplication;
+import io.cloudbeaver.model.app.ServletApplication;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.model.rm.RMController;
 
@@ -25,16 +25,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class RMControllerInvocationHandler implements InvocationHandler {
-    private final WebApplication webApplication;
+    private final ServletApplication servletApplication;
     private final RMController rmController;
 
-    public RMControllerInvocationHandler(RMController rmController, WebApplication webApplication) {
-        this.webApplication = webApplication;
+    public RMControllerInvocationHandler(RMController rmController, ServletApplication servletApplication) {
+        this.servletApplication = servletApplication;
         this.rmController = rmController;
     }
 
     private void checkIsRmEnabled() throws DBException {
-        if (!webApplication.getAppConfiguration().isResourceManagerEnabled()) {
+        if (!servletApplication.getAppConfiguration().isResourceManagerEnabled()) {
             throw new DBException("Resource Manager disabled");
         }
     }

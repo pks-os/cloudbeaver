@@ -18,12 +18,12 @@ package io.cloudbeaver.server;
 
 import com.google.gson.*;
 import io.cloudbeaver.model.app.BaseServerConfigurationController;
-import io.cloudbeaver.model.app.BaseWebApplication;
+import io.cloudbeaver.model.app.BaseServletApplication;
 import io.cloudbeaver.model.config.CBAppConfig;
 import io.cloudbeaver.model.config.CBServerConfig;
 import io.cloudbeaver.model.config.PasswordPolicyConfiguration;
 import io.cloudbeaver.model.config.SMControllerConfiguration;
-import io.cloudbeaver.utils.WebAppUtils;
+import io.cloudbeaver.utils.ServletAppUtils;
 import org.jkiss.code.NotNull;
 import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.DBException;
@@ -76,7 +76,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
         return Stream.of(serverConfiguration.getServerURL(),
                 serverConfiguration.getRootURI(),
                 serverConfiguration.getServicesURI())
-            .map(WebAppUtils::removeSideSlashes)
+            .map(ServletAppUtils::removeSideSlashes)
             .filter(CommonUtils::isNotEmpty)
             .collect(Collectors.joining("/"));
     }
@@ -139,7 +139,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
         Gson gson = getGson();
         Map<String, Object> currentConfigurationAsMap = gson.fromJson(gson.toJson(getServerConfiguration()),
             JSONUtils.MAP_TYPE_TOKEN);
-        serverConfig = WebAppUtils.mergeConfigurations(currentConfigurationAsMap, serverConfig);
+        serverConfig = ServletAppUtils.mergeConfigurations(currentConfigurationAsMap, serverConfig);
         gson.fromJson(
             gson.toJson(serverConfig),
             getServerConfiguration().getClass()
@@ -174,9 +174,9 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
             config.setServerURL("http://" + hostName + ":" + config.getServerPort());
         }
 
-        config.setContentRoot(WebAppUtils.getRelativePath(config.getContentRoot(), homeDirectory));
+        config.setContentRoot(ServletAppUtils.getRelativePath(config.getContentRoot(), homeDirectory));
         config.setRootURI(readRootUri(config.getRootURI()));
-        config.setDriversLocation(WebAppUtils.getRelativePath(config.getDriversLocation(), homeDirectory));
+        config.setDriversLocation(ServletAppUtils.getRelativePath(config.getDriversLocation(), homeDirectory));
 
         String staticContentsFile = config.getStaticContent();
         if (!CommonUtils.isEmpty(staticContentsFile)) {
@@ -231,7 +231,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
         if (!serverConfig.containsKey(CBConstants.PARAM_PRODUCT_SETTINGS)
             && serverConfig.get(CBConstants.PARAM_PRODUCT_CONFIGURATION) instanceof String
         ) {
-            String productConfigPath = WebAppUtils.getRelativePath(
+            String productConfigPath = ServletAppUtils.getRelativePath(
                 JSONUtils.getString(
                     serverConfig,
                     CBConstants.PARAM_PRODUCT_CONFIGURATION,
@@ -248,7 +248,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
                     try (Reader reader = new InputStreamReader(new FileInputStream(productConfigFile),
                         StandardCharsets.UTF_8)) {
                         serverConfiguration.getProductSettings()
-                            .putAll(WebAppUtils.flattenMap(JSONUtils.parseMap(gson, reader)));
+                            .putAll(ServletAppUtils.flattenMap(JSONUtils.parseMap(gson, reader)));
                     } catch (Exception e) {
                         throw new DBException("Error reading product configuration", e);
                     }
@@ -265,7 +265,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
                     var runtimeProductSettings = JSONUtils.parseMap(gson, reader);
                     var productSettings = serverConfiguration.getProductSettings();
                     runtimeProductSettings.putAll(productSettings);
-                    Map<String, Object> flattenConfig = WebAppUtils.flattenMap(runtimeProductSettings);
+                    Map<String, Object> flattenConfig = ServletAppUtils.flattenMap(runtimeProductSettings);
                     productSettings.clear();
                     productSettings.putAll(flattenConfig);
                 } catch (Exception e) {
@@ -276,7 +276,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
     }
 
     protected Map<String, Object> readConnectionsPermissionsConfiguration(Path parentPath) {
-        String permissionsConfigPath = WebAppUtils.getRelativePath(CBConstants.DEFAULT_DATASOURCE_PERMISSIONS_CONFIGURATION,
+        String permissionsConfigPath = ServletAppUtils.getRelativePath(CBConstants.DEFAULT_DATASOURCE_PERMISSIONS_CONFIGURATION,
             parentPath);
         File permissionsConfigFile = new File(permissionsConfigPath);
         if (permissionsConfigFile.exists()) {
@@ -301,7 +301,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
             if (originalConfigurationProperties.isEmpty()) {
                 originalConfigurationProperties.putAll(configProps);
             } else {
-                var mergedOriginalConfigs = WebAppUtils.mergeConfigurations(
+                var mergedOriginalConfigs = ServletAppUtils.mergeConfigurations(
                     originalConfigurationProperties,
                     configProps
                 );
@@ -394,7 +394,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
     ) {
         Map<String, Object> rootConfig = new LinkedHashMap<>();
         {
-            var originServerConfig = BaseWebApplication.getServerConfigProps(this.originalConfigurationProperties); // get server properties from original configuration file
+            var originServerConfig = BaseServletApplication.getServerConfigProps(this.originalConfigurationProperties); // get server properties from original configuration file
             var serverConfigProperties = collectServerConfigProperties(serverConfig, originServerConfig);
             rootConfig.put("server", serverConfigProperties);
         }
@@ -560,7 +560,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
                 return super.get(name);
             }
         };
-        BaseWebApplication.patchConfigurationWithProperties(configProps, varResolver);
+        BaseServletApplication.patchConfigurationWithProperties(configProps, varResolver);
     }
 
     // gets info about patterns from original configuration file and saves it to runtime config
@@ -583,7 +583,7 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
             }
             newConfig.put(key, subValue);
         } else {
-            Object newConfigValue = WebAppUtils.getExtractedValue(oldConfig.get(key), defaultValue);
+            Object newConfigValue = ServletAppUtils.getExtractedValue(oldConfig.get(key), defaultValue);
             newConfig.put(key, newConfigValue);
         }
     }
@@ -613,9 +613,9 @@ public abstract class CBServerConfigurationController<T extends CBServerConfig>
 
     public void saveProductConfiguration(Map<String, Object> productConfiguration) throws DBException {
         Map<String, Object> productSettings = getServerConfiguration().getProductSettings();
-        Map<String, Object> mergedConfig = WebAppUtils.mergeConfigurations(productSettings, productConfiguration);
+        Map<String, Object> mergedConfig = ServletAppUtils.mergeConfigurations(productSettings, productConfiguration);
         productSettings.clear();
-        productSettings.putAll(WebAppUtils.flattenMap(mergedConfig));
+        productSettings.putAll(ServletAppUtils.flattenMap(mergedConfig));
     }
 
     public T getServerConfiguration() {

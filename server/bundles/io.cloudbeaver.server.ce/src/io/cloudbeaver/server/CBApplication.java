@@ -18,8 +18,8 @@ package io.cloudbeaver.server;
 
 import io.cloudbeaver.WebServiceUtils;
 import io.cloudbeaver.auth.NoAuthCredentialsProvider;
-import io.cloudbeaver.model.app.BaseWebApplication;
-import io.cloudbeaver.model.app.WebAuthApplication;
+import io.cloudbeaver.model.app.BaseServletApplication;
+import io.cloudbeaver.model.app.ServletAuthApplication;
 import io.cloudbeaver.model.app.WebAuthConfiguration;
 import io.cloudbeaver.model.config.CBAppConfig;
 import io.cloudbeaver.model.config.CBServerConfig;
@@ -29,7 +29,7 @@ import io.cloudbeaver.registry.WebServiceRegistry;
 import io.cloudbeaver.server.jetty.CBJettyServer;
 import io.cloudbeaver.service.DBWServiceInitializer;
 import io.cloudbeaver.service.DBWServiceServerConfigurator;
-import io.cloudbeaver.service.session.WebSessionManager;
+import io.cloudbeaver.service.session.CBSessionManager;
 import io.cloudbeaver.utils.WebDataSourceUtils;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -74,7 +74,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * This class controls all aspects of the application's execution
  */
 public abstract class CBApplication<T extends CBServerConfig> extends
-    BaseWebApplication implements WebAuthApplication, GQLApplicationAdapter {
+    BaseServletApplication implements ServletAuthApplication, WebApplication {
 
     private static final Log log = Log.getLog(CBApplication.class);
 
@@ -105,7 +105,7 @@ public abstract class CBApplication<T extends CBServerConfig> extends
 
     protected final WSEventController eventController = new WSEventController();
 
-    private WebSessionManager sessionManager;
+    private CBSessionManager sessionManager;
 
     private final Map<String, String> initActions = new ConcurrentHashMap<>();
 
@@ -660,15 +660,15 @@ public abstract class CBApplication<T extends CBServerConfig> extends
         return null;
     }
 
-    public WebSessionManager getSessionManager() {
+    public CBSessionManager getSessionManager() {
         if (sessionManager == null) {
             sessionManager = createSessionManager();
         }
         return sessionManager;
     }
 
-    protected WebSessionManager createSessionManager() {
-        return new WebSessionManager(this);
+    protected CBSessionManager createSessionManager() {
+        return new CBSessionManager(this);
     }
 
     @NotNull
@@ -709,7 +709,7 @@ public abstract class CBApplication<T extends CBServerConfig> extends
 
     @Override
     public Class<? extends DBPPlatformUI> getPlatformUIClass() {
-        return CBPlatformUI.class;
+        return ServletPlatformUI.class;
     }
 
     public void saveProductConfiguration(

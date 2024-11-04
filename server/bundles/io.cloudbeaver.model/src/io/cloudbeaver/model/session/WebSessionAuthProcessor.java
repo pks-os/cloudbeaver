@@ -24,7 +24,7 @@ import io.cloudbeaver.model.app.WebAuthConfiguration;
 import io.cloudbeaver.model.user.WebUser;
 import io.cloudbeaver.registry.WebAuthProviderDescriptor;
 import io.cloudbeaver.registry.WebAuthProviderRegistry;
-import io.cloudbeaver.utils.WebAppUtils;
+import io.cloudbeaver.utils.ServletAppUtils;
 import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.Log;
@@ -82,7 +82,7 @@ public class WebSessionAuthProcessor {
 
     @SuppressWarnings("unchecked")
     private List<WebAuthInfo> finishWebSessionAuthorization(SMAuthInfo authInfo) throws DBException {
-        boolean configMode = WebAppUtils.getWebApplication().isConfigurationMode();
+        boolean configMode = ServletAppUtils.getServletApplication().isConfigurationMode();
         boolean alreadyLoggedIn = webSession.getUser() != null;
         boolean resetUserStateOnError = !alreadyLoggedIn;
 
@@ -127,7 +127,7 @@ public class WebSessionAuthProcessor {
 
                 DBWUserIdentity userIdentity = null;
                 var providerConfigId = authConfiguration.getAuthProviderConfigurationId();
-                var providerConfig = WebAppUtils.getWebAuthApplication()
+                var providerConfig = ServletAppUtils.getWebAuthApplication()
                     .getAuthConfiguration()
                     .getAuthProviderConfiguration(providerConfigId);
                 if (authProviderExternal != null) {
@@ -194,7 +194,8 @@ public class WebSessionAuthProcessor {
     }
 
     private boolean isProviderEnabled(@NotNull String providerId) {
-        WebAuthConfiguration appConfiguration = (WebAuthConfiguration) WebAppUtils.getWebApplication().getAppConfiguration();
+        WebAuthConfiguration appConfiguration = (WebAuthConfiguration) ServletAppUtils.getServletApplication()
+            .getAppConfiguration();
         return appConfiguration.isAuthProviderEnabled(providerId);
     }
 }

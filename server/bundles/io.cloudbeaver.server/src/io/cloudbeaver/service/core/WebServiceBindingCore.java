@@ -24,7 +24,8 @@ import io.cloudbeaver.WebServiceUtils;
 import io.cloudbeaver.model.WebConnectionConfig;
 import io.cloudbeaver.model.WebNetworkHandlerConfigInput;
 import io.cloudbeaver.model.session.WebSession;
-import io.cloudbeaver.server.CBPlatform;
+import io.cloudbeaver.server.BaseWebPlatform;
+import io.cloudbeaver.server.WebAppUtils;
 import io.cloudbeaver.server.graphql.GraphQLEndpoint;
 import io.cloudbeaver.service.DBWBindingContext;
 import io.cloudbeaver.service.WebServiceBindingBase;
@@ -48,7 +49,7 @@ public class WebServiceBindingCore extends WebServiceBindingBase<DBWServiceCore>
 
     @Override
     public void bindWiring(DBWBindingContext model) throws DBWebException {
-        CBPlatform platform = CBPlatform.getInstance();
+        BaseWebPlatform platform = WebAppUtils.getWebPlatform();
         var sessionManager = platform.getSessionManager();
         model.getQueryType()
             .dataFetcher("serverConfig", env -> getService(env).getServerConfig())

@@ -43,7 +43,7 @@ public abstract class BaseServerConfigurationController<T extends WebServerConfi
     protected BaseServerConfigurationController(@NotNull Path homeDirectory) {
         this.homeDirectory = homeDirectory;
         //default workspaceLocation
-        this.workspacePath = homeDirectory.resolve("workspace");
+        this.workspacePath = null;
     }
 
     @NotNull

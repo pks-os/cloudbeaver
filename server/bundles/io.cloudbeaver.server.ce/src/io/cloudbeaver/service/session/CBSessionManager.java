@@ -18,12 +18,12 @@ package io.cloudbeaver.service.session;
 
 import io.cloudbeaver.DBWebException;
 import io.cloudbeaver.auth.SMTokenCredentialProvider;
-import io.cloudbeaver.server.AppWebSessionManager;
 import io.cloudbeaver.model.session.*;
 import io.cloudbeaver.registry.WebHandlerRegistry;
 import io.cloudbeaver.registry.WebSessionHandlerDescriptor;
 import io.cloudbeaver.server.CBApplication;
 import io.cloudbeaver.server.CBConstants;
+import io.cloudbeaver.server.WebAppSessionManager;
 import io.cloudbeaver.server.events.WSWebUtils;
 import io.cloudbeaver.service.DBWSessionHandler;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,14 +48,14 @@ import java.util.stream.Collectors;
 /**
  * Web session manager
  */
-public class WebSessionManager implements AppWebSessionManager {
+public class CBSessionManager implements WebAppSessionManager {
 
-    private static final Log log = Log.getLog(WebSessionManager.class);
+    private static final Log log = Log.getLog(CBSessionManager.class);
 
     private final CBApplication application;
     private final Map<String, BaseWebSession> sessionMap = new HashMap<>();
 
-    public WebSessionManager(CBApplication application) {
+    public CBSessionManager(CBApplication application) {
         this.application = application;
     }
 

@@ -35,14 +35,14 @@ import java.util.Map;
 /**
  * Base interface for web application
  */
-public interface WebApplication extends DBPApplication {
+public interface ServletApplication extends DBPApplication {
     boolean isConfigurationMode();
 
-   default boolean isInitializationMode() {
-       return false;
-   }
+    default boolean isInitializationMode() {
+        return false;
+    }
 
-    WebAppConfiguration getAppConfiguration();
+    ServletAppConfiguration getAppConfiguration();
 
     WebServerConfiguration getServerConfiguration();
 

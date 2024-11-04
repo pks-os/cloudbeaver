@@ -20,9 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.cloudbeaver.DBWebException;
-import io.cloudbeaver.model.app.WebApplication;
+import io.cloudbeaver.model.app.ServletApplication;
 import io.cloudbeaver.model.session.WebSession;
-import io.cloudbeaver.server.CBApplication;
 import io.cloudbeaver.server.CBPlatform;
 import io.cloudbeaver.service.WebServiceServletBase;
 import jakarta.servlet.MultipartConfigElement;
@@ -61,7 +60,7 @@ public class WebSQLFileLoaderServlet extends WebServiceServletBase {
             .setPrettyPrinting()
             .create();
 
-    public WebSQLFileLoaderServlet(WebApplication application) {
+    public WebSQLFileLoaderServlet(ServletApplication application) {
         super(application);
     }
 

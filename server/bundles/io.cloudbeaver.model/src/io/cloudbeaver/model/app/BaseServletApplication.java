@@ -47,14 +47,14 @@ import java.util.Map;
 /**
  * Web application
  */
-public abstract class BaseWebApplication extends BaseApplicationImpl implements WebApplication {
+public abstract class BaseServletApplication extends BaseApplicationImpl implements ServletApplication {
 
     public static final String DEFAULT_CONFIG_FILE_PATH = "/etc/cloudbeaver.conf";
     public static final String CUSTOM_CONFIG_FOLDER = "custom";
     public static final String CLI_PARAM_WEB_CONFIG = "-web-config";
     public static final String LOGBACK_FILE_NAME = "logback.xml";
 
-    private static final Log log = Log.getLog(BaseWebApplication.class);
+    private static final Log log = Log.getLog(BaseServletApplication.class);
 
     private String instanceId;
 

@@ -18,6 +18,7 @@ package io.cloudbeaver.model.app;
 
 import io.cloudbeaver.server.WebServerPreferenceStore;
 import org.jkiss.code.NotNull;
+import org.jkiss.code.Nullable;
 
 import java.util.Map;
 
@@ -40,4 +41,11 @@ public interface WebServerConfiguration {
         return Map.of();
     }
 
+    @Nullable
+    String getServerName();
+
+    @Nullable
+    String getServerURL();
+
+    long getMaxSessionIdleTime();
 }

@@ -30,7 +30,7 @@ import org.jkiss.dbeaver.DBException;
 
 import java.util.Collection;
 
-public interface AppWebSessionManager {
+public interface WebAppSessionManager {
     BaseWebSession closeSession(@NotNull HttpServletRequest request);
 
     @NotNull
@@ -61,4 +61,8 @@ public interface AppWebSessionManager {
     WebHeadlessSession getHeadlessSession(Request request, Session session, boolean create) throws DBException;
 
     boolean touchSession(HttpServletRequest request, HttpServletResponse response) throws DBWebException;
+
+    default void expireIdleSessions() {
+
+    }
 }

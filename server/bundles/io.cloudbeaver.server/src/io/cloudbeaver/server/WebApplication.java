@@ -16,20 +16,25 @@
  */
 package io.cloudbeaver.server;
 
-import io.cloudbeaver.model.app.WebApplication;
+import io.cloudbeaver.model.app.ServletApplication;
+import io.cloudbeaver.model.app.WebAppConfiguration;
 import io.cloudbeaver.registry.WebDriverRegistry;
 import org.jkiss.code.NotNull;
+import org.jkiss.code.Nullable;
 
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 
-//FIXME: this interface should not exist,
-// the logic of platforms and applications should be separated from each other
-public interface GQLApplicationAdapter extends WebApplication {
-    AppWebSessionManager getSessionManager();
+/**
+ * Base interface for applications with web ui
+ */
+public interface WebApplication extends ServletApplication {
+    WebAppSessionManager getSessionManager();
 
     WebDriverRegistry getDriverRegistry();
+
+    WebAppConfiguration getAppConfiguration();
 
     @NotNull
     Map<String, Object> getProductConfiguration();
@@ -41,4 +46,11 @@ public interface GQLApplicationAdapter extends WebApplication {
     boolean isLicenseValid();
 
     String getLicenseStatus();
+
+    @Nullable
+    default String getContainerId() {
+        return null;
+    }
+
+    String getLocalHostAddress();
 }

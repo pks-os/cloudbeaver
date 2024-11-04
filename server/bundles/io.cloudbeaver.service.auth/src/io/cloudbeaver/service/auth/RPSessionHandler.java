@@ -26,7 +26,7 @@ import io.cloudbeaver.registry.WebAuthProviderDescriptor;
 import io.cloudbeaver.registry.WebAuthProviderRegistry;
 import io.cloudbeaver.server.CBApplication;
 import io.cloudbeaver.service.DBWSessionHandler;
-import io.cloudbeaver.utils.WebAppUtils;
+import io.cloudbeaver.utils.ServletAppUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jkiss.code.NotNull;
@@ -43,10 +43,10 @@ import org.jkiss.utils.CommonUtils;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.*;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class RPSessionHandler implements DBWSessionHandler {
 
@@ -57,7 +57,8 @@ public class RPSessionHandler implements DBWSessionHandler {
     public boolean handleSessionOpen(WebSession webSession, HttpServletRequest request, HttpServletResponse response) throws DBException, IOException {
         boolean configMode = CBApplication.getInstance().isConfigurationMode();
         //checks if the app is not in configuration mode and reverse proxy auth is enabled in the config file
-        WebAuthConfiguration appConfiguration = (WebAuthConfiguration) WebAppUtils.getWebApplication().getAppConfiguration();
+        WebAuthConfiguration appConfiguration = (WebAuthConfiguration) ServletAppUtils.getServletApplication()
+            .getAppConfiguration();
         boolean isReverseProxyAuthEnabled = appConfiguration.isAuthProviderEnabled(RPAuthProvider.AUTH_PROVIDER);
         if (!configMode && isReverseProxyAuthEnabled) {
             reverseProxyAuthentication(request, webSession);
@@ -72,7 +73,7 @@ public class RPSessionHandler implements DBWSessionHandler {
             throw new DBWebException("Auth provider " + RPAuthProvider.AUTH_PROVIDER + " not found");
         }
         SMAuthProviderExternal<?> authProviderExternal = (SMAuthProviderExternal<?>) authProvider.getInstance();
-        SMAuthProviderCustomConfiguration configuration = WebAppUtils.getWebAuthApplication()
+        SMAuthProviderCustomConfiguration configuration = ServletAppUtils.getWebAuthApplication()
             .getAuthConfiguration()
             .getAuthCustomConfigurations()
             .stream()
