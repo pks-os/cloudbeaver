@@ -116,6 +116,9 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
     ///////////////////////////////////////////
     // Users
 
+    /**
+     * Creates user. Saves user id in database in lower-case.
+     */
     @Override
     public void createUser(
         @NotNull String userId,
@@ -141,6 +144,9 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
         }
     }
 
+    /**
+     * Creates user. Saves user id in database as it is.
+     */
     public void createUser(
         @NotNull Connection dbCon,
         @NotNull String userId,
