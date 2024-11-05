@@ -28,7 +28,7 @@ You can see a live demo of CloudBeaver here: https://demo.cloudbeaver.io
 ### 24.2.4. 2024-11-04
 - General:
   -    Data export: Added the ability to export JSON values as embedded JSON;
-  -    Brazilian Portuguese localization was enhanced (thanks to @brlarini);
+  -    Brazilian Portuguese localization was enhanced (thanks to [brlarini](https://github.com/brlarini));
   -    Fixed a proxy issue that excluded the Content-Type header in responses.
 - Administration:
   -    Refreshed design for the User and Teams tab in the Administration panel;
