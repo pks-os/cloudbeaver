@@ -104,7 +104,7 @@ export class ConnectionAuthService extends Dependency {
       if (resetCredentials && isConnectedInitially && result === DialogueStateResult.Rejected) {
         await this.connectionInfoResource.init(key);
       }
-    } else if (!connection.connected) {
+    } else {
       await this.connectionInfoResource.init({ projectId: key.projectId, connectionId: key.connectionId });
     }
 
