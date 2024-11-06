@@ -8,7 +8,7 @@
 import { UsersResource } from '@cloudbeaver/core-authentication';
 import { Button, type ButtonProps, useTranslate } from '@cloudbeaver/core-blocks';
 import { useService } from '@cloudbeaver/core-di';
-import { CommonDialogService } from '@cloudbeaver/core-dialogs';
+import { CommonDialogService, DialogueStateResult } from '@cloudbeaver/core-dialogs';
 
 import { AdministrationUsersManagementService } from '../../../AdministrationUsersManagementService.js';
 import { DeleteUserDialog } from './DeleteUserDialog.js';
@@ -17,9 +17,15 @@ import { DisableUserDialog } from './DisableUserDialog.js';
 interface Props extends ButtonProps {
   userId: string;
   enabled: boolean;
+  onDisable: VoidFunction;
 }
 
-export const AdministrationUserFormDeleteButton: React.FC<Props> = function AdministrationUserFormDeleteButton({ userId, enabled, ...rest }) {
+export const AdministrationUserFormDeleteButton: React.FC<Props> = function AdministrationUserFormDeleteButton({
+  userId,
+  enabled,
+  onDisable,
+  ...rest
+}) {
   const translate = useTranslate();
   const commonDialogService = useService(CommonDialogService);
   const administrationUsersManagementService = useService(AdministrationUsersManagementService);
@@ -40,10 +46,16 @@ export const AdministrationUserFormDeleteButton: React.FC<Props> = function Admi
 
   async function deleteUser() {
     if (enabled) {
-      await commonDialogService.open(DisableUserDialog, {
+      const result = await commonDialogService.open(DisableUserDialog, {
         userId,
         onDelete: openUserDeleteDialog,
       });
+
+      if (result === DialogueStateResult.Rejected) {
+        return;
+      }
+
+      onDisable();
     } else {
       await openUserDeleteDialog();
     }

@@ -59,6 +59,10 @@ export const AdministrationUserForm = observer<Props>(function AdministrationUse
     },
   });
 
+  function onDisableUser() {
+    userFormInfoPart.state.enabled = false;
+  }
+
   useAutoLoad(AdministrationUserForm, [userFormInfoPart]);
 
   return (
@@ -77,7 +81,11 @@ export const AdministrationUserForm = observer<Props>(function AdministrationUse
             </Container>
             <Container keepSize noWrap center gap compact>
               {editing && (
-                <AdministrationUserFormDeleteButton userId={userFormInfoPart.initialState.userId} enabled={userFormInfoPart.initialState.enabled} />
+                <AdministrationUserFormDeleteButton
+                  userId={userFormInfoPart.initialState.userId}
+                  enabled={userFormInfoPart.initialState.enabled}
+                  onDisable={onDisableUser}
+                />
               )}
               <Button type="button" disabled={state.isDisabled} mod={['outlined']} onClick={onClose}>
                 {translate('ui_processing_cancel')}
