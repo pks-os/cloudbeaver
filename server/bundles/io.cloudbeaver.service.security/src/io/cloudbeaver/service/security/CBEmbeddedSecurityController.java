@@ -1215,8 +1215,9 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
         if (CommonUtils.isEmpty(teamId)) {
             throw new DBCException("Empty team name is not allowed");
         }
+        teamId = teamId.toLowerCase();
         if (isSubjectExists(teamId)) {
-            throw new DBCException("User or team '" + teamId.toLowerCase() + "' already exists");
+            throw new DBCException("User or team '" + teamId + "' already exists");
         }
         try (Connection dbCon = database.openConnection()) {
             try (JDBCTransaction txn = new JDBCTransaction(dbCon)) {
@@ -1224,7 +1225,7 @@ public class CBEmbeddedSecurityController<T extends WebAuthApplication>
                 try (PreparedStatement dbStat = dbCon.prepareStatement(
                     database.normalizeTableNames("INSERT INTO {table_prefix}CB_TEAM" +
                         "(TEAM_ID,TEAM_NAME,TEAM_DESCRIPTION,CREATE_TIME) VALUES(?,?,?,?)"))) {
-                    dbStat.setString(1, teamId.toLowerCase());
+                    dbStat.setString(1, teamId);
                     dbStat.setString(2, CommonUtils.notEmpty(name));
                     dbStat.setString(3, CommonUtils.notEmpty(description));
                     dbStat.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
