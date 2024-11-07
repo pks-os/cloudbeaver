@@ -17,7 +17,7 @@ import { DisableUserDialog } from './DisableUserDialog.js';
 interface Props extends ButtonProps {
   userId: string;
   enabled: boolean;
-  onDisable: VoidFunction;
+  onDisable: VoidFunction | (() => Promise<void>);
 }
 
 export const AdministrationUserFormDeleteButton: React.FC<Props> = function AdministrationUserFormDeleteButton({
@@ -55,7 +55,7 @@ export const AdministrationUserFormDeleteButton: React.FC<Props> = function Admi
         return;
       }
 
-      onDisable();
+      await onDisable();
     } else {
       await openUserDeleteDialog();
     }
