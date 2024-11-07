@@ -70,8 +70,6 @@ export default [
   ['settings_data_editor_disable_data_copy_description', '在数据查看器中为非管理员用户禁用数据复制'],
   ['settings_data_editor_disable_data_export_name', '禁用导出'],
   ['settings_data_editor_disable_data_export_description', '在数据查看器中为非管理员用户禁用数据导出'],
-  ['settings_data_editor_disable_data_import_name', 'Disable Import'],
-  ['settings_data_editor_disable_data_import_description', 'Disable importing of data in Data Viewer for non-admin users'],
   ['settings_data_editor_fetch_max_name', '最大查询数量'],
   ['settings_data_editor_fetch_max_description', '最大查询数据行数'],
   ['settings_data_editor_fetch_default_name', '默认查询数量'],

@@ -34,8 +34,8 @@ export class DataImportSettingsService {
         group: DATA_EDITOR_SETTINGS_GROUP,
         key: 'plugin.data-import.disabled',
         type: ESettingsValueType.Checkbox,
-        name: 'settings_data_editor_disable_data_import_name',
-        description: 'settings_data_editor_disable_data_import_description',
+        name: 'plugin_data_import_disable_data_import_name',
+        description: 'plugin_data_import_disable_data_import_description',
         access: {
           scope: ['server'],
         },
