@@ -59,10 +59,6 @@ export const AdministrationUserForm = observer<Props>(function AdministrationUse
     },
   });
 
-  async function onDisableUser() {
-    await userFormInfoPart.disableUser();
-  }
-
   useAutoLoad(AdministrationUserForm, [userFormInfoPart]);
 
   return (
@@ -84,7 +80,7 @@ export const AdministrationUserForm = observer<Props>(function AdministrationUse
                 <AdministrationUserFormDeleteButton
                   userId={userFormInfoPart.initialState.userId}
                   enabled={userFormInfoPart.initialState.enabled}
-                  onDisable={onDisableUser}
+                  disableUser={userFormInfoPart.disableUser}
                 />
               )}
               <Button type="button" disabled={state.isDisabled} mod={['outlined']} onClick={onClose}>
