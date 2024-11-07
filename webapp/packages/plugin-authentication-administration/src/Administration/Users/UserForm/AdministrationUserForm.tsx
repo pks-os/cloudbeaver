@@ -60,7 +60,7 @@ export const AdministrationUserForm = observer<Props>(function AdministrationUse
   });
 
   function onDisableUser() {
-    userFormInfoPart.state.enabled = false;
+    userFormInfoPart.disableUser();
   }
 
   useAutoLoad(AdministrationUserForm, [userFormInfoPart]);

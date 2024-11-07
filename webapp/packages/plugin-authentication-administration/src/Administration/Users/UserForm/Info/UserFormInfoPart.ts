@@ -74,6 +74,11 @@ export class UserFormInfoPart extends FormPart<IUserFormInfoState, IUserFormStat
     return this.loaded;
   }
 
+  async disableUser() {
+    this.state.enabled = false;
+    await this.saveChanges();
+  }
+
   override get isChanged(): boolean {
     if (!this.loaded) {
       return false;
