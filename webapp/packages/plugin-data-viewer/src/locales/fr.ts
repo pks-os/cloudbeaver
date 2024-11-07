@@ -68,6 +68,8 @@ export default [
   ['settings_data_editor_disable_data_copy_name', 'Désactiver la copie'],
   ['settings_data_editor_disable_data_export_name', 'Disable Export'],
   ['settings_data_editor_disable_data_export_description', 'Disable exporting of data in Data Viewer for non-admin users'],
+  ['settings_data_editor_disable_data_import_name', 'Disable Import'],
+  ['settings_data_editor_disable_data_import_description', 'Disable importing of data in Data Viewer for non-admin users'],
   [
     'settings_data_editor_disable_data_copy_description',
     'Désactiver la copie des données dans le Data Viewer pour les utilisateurs non administrateurs',
