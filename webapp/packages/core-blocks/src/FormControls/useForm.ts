@@ -16,6 +16,7 @@ import { type FormChangeHandler, FormContext, type IChangeData, type IFormContex
 interface IOptions {
   parent?: IFormContext;
   disableEnterSubmit?: boolean;
+  disableCtrlEnterSubmit?: boolean;
   onSubmit?: (event?: SubmitEvent | undefined) => Promise<void> | void;
   onChange?: FormChangeHandler;
 }
@@ -31,6 +32,7 @@ export function useForm(options?: IOptions): IFormContext {
   }
 
   const disableEnterSubmit = options?.disableEnterSubmit ?? parentForm?.disableEnterSubmit ?? false;
+  const disableCtrlEnterSubmit = options?.disableCtrlEnterSubmit ?? parentForm?.disableCtrlEnterSubmit ?? false;
 
   useExecutor({
     executor: parentForm?.onChange,
@@ -78,10 +80,17 @@ export function useForm(options?: IOptions): IFormContext {
           this.onChange.execute({ value, name });
         }
       },
-      keyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+      keyDown(event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const isCtrlEnterSubmit =
+          event.key === 'Enter' &&
+          (event.ctrlKey || event.metaKey) &&
+          this.disableCtrlEnterSubmit === false &&
+          event.target instanceof HTMLTextAreaElement;
+        const isEnterSubmit = event.key === 'Enter' && this.disableEnterSubmit === false && event.target instanceof HTMLInputElement;
+
         if (this.parent) {
           this.parent.keyDown(event);
-        } else if (event.key === 'Enter' && this.disableEnterSubmit === false) {
+        } else if (isCtrlEnterSubmit || isEnterSubmit) {
           event.preventDefault();
           if (this.ref) {
             this.ref?.requestSubmit();
@@ -121,7 +130,7 @@ export function useForm(options?: IOptions): IFormContext {
         }
       },
     }),
-    { parent: parentForm, disableEnterSubmit },
+    { parent: parentForm, disableEnterSubmit, disableCtrlEnterSubmit },
     ['setRef', 'change', 'keyDown', 'submit', 'validate'],
   );
 

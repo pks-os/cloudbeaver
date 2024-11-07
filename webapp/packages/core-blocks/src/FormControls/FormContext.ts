@@ -11,7 +11,7 @@ import type { IExecutor, SyncExecutor } from '@cloudbeaver/core-executor';
 
 export type FormChangeValues = string | number | boolean | FileList | null | undefined;
 export type FormChangeHandler = (value: FormChangeValues, name: string | undefined) => void;
-type KeyHandler = (event: React.KeyboardEvent<HTMLInputElement>) => void;
+type KeyHandler = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 
 export interface IChangeData {
   value: FormChangeValues;
@@ -25,6 +25,7 @@ export interface IFormContext {
   onChange: IExecutor<IChangeData>;
   parent: IFormContext | null;
   disableEnterSubmit: boolean;
+  disableCtrlEnterSubmit: boolean;
   setRef: (ref: HTMLFormElement | null) => void;
   change: FormChangeHandler;
   keyDown: KeyHandler;
