@@ -31,7 +31,6 @@ const defaultSettings = schema.object({
   'plugin.data-viewer.fetchMax': schema.coerce.number().min(FETCH_MIN).default(FETCH_MAX),
   'resultset.maxrows': schema.coerce.number().min(FETCH_MIN).max(FETCH_MAX).default(DEFAULT_FETCH_SIZE),
   'plugin.data-viewer.export.disabled': schemaExtra.stringedBoolean().default(false),
-  'plugin.data-import.disabled': schemaExtra.stringedBoolean().default(false),
 });
 
 export type DataViewerSettings = schema.infer<typeof defaultSettings>;
@@ -152,16 +151,6 @@ export class DataViewerSettingsService extends Dependency {
           type: ESettingsValueType.Checkbox,
           name: 'settings_data_editor_disable_data_export_name',
           description: 'settings_data_editor_disable_data_export_description',
-          access: {
-            scope: ['server'],
-          },
-        },
-        {
-          group: DATA_EDITOR_SETTINGS_GROUP,
-          key: 'plugin.data-import.disabled',
-          type: ESettingsValueType.Checkbox,
-          name: 'settings_data_editor_disable_data_import_name',
-          description: 'settings_data_editor_disable_data_import_description',
           access: {
             scope: ['server'],
           },
