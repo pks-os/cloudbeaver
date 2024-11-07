@@ -6,13 +6,7 @@
  * you may not use this file except in compliance with the License.
  */
 import { injectable } from '@cloudbeaver/core-di';
-import {
-  ESettingsValueType,
-  type ISettingDescription,
-  SettingsManagerService,
-  SettingsProvider,
-  SettingsProviderService,
-} from '@cloudbeaver/core-settings';
+import { ESettingsValueType, SettingsManagerService, SettingsProvider, SettingsProviderService } from '@cloudbeaver/core-settings';
 import { schema, schemaExtra } from '@cloudbeaver/core-utils';
 import { DATA_EDITOR_SETTINGS_GROUP } from '@cloudbeaver/plugin-data-viewer';
 
@@ -35,21 +29,17 @@ export class DataImportSettingsService {
   ) {
     this.settings = this.settingsProviderService.createSettings(defaultSettings);
 
-    this.settingsManagerService.registerSettings(this.settings, () => {
-      const settings: ISettingDescription<DataImportSettings>[] = [
-        {
-          group: DATA_EDITOR_SETTINGS_GROUP,
-          key: 'plugin.data-import.disabled',
-          type: ESettingsValueType.Checkbox,
-          name: 'settings_data_editor_disable_data_import_name',
-          description: 'settings_data_editor_disable_data_import_description',
-          access: {
-            scope: ['server'],
-          },
+    this.settingsManagerService.registerSettings(this.settings, () => [
+      {
+        group: DATA_EDITOR_SETTINGS_GROUP,
+        key: 'plugin.data-import.disabled',
+        type: ESettingsValueType.Checkbox,
+        name: 'settings_data_editor_disable_data_import_name',
+        description: 'settings_data_editor_disable_data_import_description',
+        access: {
+          scope: ['server'],
         },
-      ];
-
-      return settings;
-    });
+      },
+    ]);
   }
 }
