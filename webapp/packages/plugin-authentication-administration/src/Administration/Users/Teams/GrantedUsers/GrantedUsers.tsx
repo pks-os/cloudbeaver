@@ -8,7 +8,7 @@
 import { observer } from 'mobx-react-lite';
 
 import { UsersResource, UsersResourceFilterKey } from '@cloudbeaver/core-authentication';
-import { Container, Group, InfoItem, Loader, s, TextPlaceholder, useAutoLoad, useResource, useS, useTranslate } from '@cloudbeaver/core-blocks';
+import { Container, Group, InfoItem, Loader, s, useAutoLoad, useResource, useS, useTranslate } from '@cloudbeaver/core-blocks';
 import { CachedResourceOffsetPageListKey } from '@cloudbeaver/core-resource';
 import { ServerConfigResource } from '@cloudbeaver/core-root';
 import { type TabContainerPanelComponent, useTab } from '@cloudbeaver/core-ui';
@@ -55,10 +55,8 @@ export const GrantedUsers: TabContainerPanelComponent<ITeamFormProps> = observer
 
   if (isDefaultTeam) {
     return (
-      <Container className={s(styles, { box: true })} parent gap vertical>
-        <Group className={s(styles, { placeholderBox: true })} keepSize large>
-          <TextPlaceholder>{translate('plugin_authentication_administration_team_default_users_tooltip')}</TextPlaceholder>
-        </Group>
+      <Container>
+        <Group large>{translate('plugin_authentication_administration_team_default_users_tooltip')}</Group>
       </Container>
     );
   }
@@ -66,11 +64,9 @@ export const GrantedUsers: TabContainerPanelComponent<ITeamFormProps> = observer
   return (
     <Loader className={s(styles, { loader: true })} state={[state.state]}>
       {() => (
-        <Container className={s(styles, { box: true })} parent gap vertical>
+        <Container className={s(styles, { box: true })} parent={!!users.resource.values.length} vertical>
           {!users.resource.values.length ? (
-            <Group className={s(styles, { placeholderBox: true })} keepSize large>
-              <TextPlaceholder>{translate('administration_teams_team_granted_users_empty')}</TextPlaceholder>
-            </Group>
+            <Group large>{translate('administration_teams_team_granted_users_empty')}</Group>
           ) : (
             <>
               {formState.mode === 'edit' && state.changed && <InfoItem info="ui_save_reminder" />}
