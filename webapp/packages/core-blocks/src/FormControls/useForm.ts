@@ -16,7 +16,6 @@ import { type FormChangeHandler, FormContext, type IChangeData, type IFormContex
 interface IOptions {
   parent?: IFormContext;
   disableEnterSubmit?: boolean;
-  disableCtrlEnterSubmit?: boolean;
   onSubmit?: (event?: SubmitEvent | undefined) => Promise<void> | void;
   onChange?: FormChangeHandler;
 }
@@ -32,7 +31,6 @@ export function useForm(options?: IOptions): IFormContext {
   }
 
   const disableEnterSubmit = options?.disableEnterSubmit ?? parentForm?.disableEnterSubmit ?? false;
-  const disableCtrlEnterSubmit = options?.disableCtrlEnterSubmit ?? parentForm?.disableCtrlEnterSubmit ?? false;
 
   useExecutor({
     executor: parentForm?.onChange,
@@ -84,7 +82,7 @@ export function useForm(options?: IOptions): IFormContext {
         const isCtrlEnterSubmit =
           event.key === 'Enter' &&
           (event.ctrlKey || event.metaKey) &&
-          this.disableCtrlEnterSubmit === false &&
+          this.disableEnterSubmit === false &&
           event.target instanceof HTMLTextAreaElement;
         const isEnterSubmit = event.key === 'Enter' && this.disableEnterSubmit === false && event.target instanceof HTMLInputElement;
 
@@ -130,7 +128,7 @@ export function useForm(options?: IOptions): IFormContext {
         }
       },
     }),
-    { parent: parentForm, disableEnterSubmit, disableCtrlEnterSubmit },
+    { parent: parentForm, disableEnterSubmit },
     ['setRef', 'change', 'keyDown', 'submit', 'validate'],
   );
 

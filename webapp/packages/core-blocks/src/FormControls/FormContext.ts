@@ -25,7 +25,6 @@ export interface IFormContext {
   onChange: IExecutor<IChangeData>;
   parent: IFormContext | null;
   disableEnterSubmit: boolean;
-  disableCtrlEnterSubmit: boolean;
   setRef: (ref: HTMLFormElement | null) => void;
   change: FormChangeHandler;
   keyDown: KeyHandler;

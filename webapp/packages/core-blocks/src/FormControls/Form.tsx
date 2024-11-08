@@ -19,7 +19,6 @@ type FormDetailedProps = Omit<React.DetailedHTMLProps<React.FormHTMLAttributes<H
   context?: IFormContext;
   disabled?: boolean;
   disableEnterSubmit?: boolean;
-  disableCtrlEnterSubmit?: boolean;
   focusFirstChild?: boolean;
   contents?: boolean;
   onSubmit?: (event?: SubmitEvent) => Promise<void> | void;
@@ -27,19 +26,7 @@ type FormDetailedProps = Omit<React.DetailedHTMLProps<React.FormHTMLAttributes<H
 };
 
 export const Form = forwardRef<HTMLFormElement, FormDetailedProps>(function Form(
-  {
-    context,
-    disabled: disabledProp,
-    disableEnterSubmit,
-    disableCtrlEnterSubmit,
-    focusFirstChild,
-    children,
-    contents,
-    style,
-    onSubmit,
-    onChange,
-    ...rest
-  },
+  { context, disabled: disabledProp, disableEnterSubmit, focusFirstChild, children, contents, style, onSubmit, onChange, ...rest },
   ref,
 ) {
   const st = useS(styles);
@@ -50,7 +37,6 @@ export const Form = forwardRef<HTMLFormElement, FormDetailedProps>(function Form
 
   const formContext = useForm({
     disableEnterSubmit,
-    disableCtrlEnterSubmit,
     parent: context,
     async onSubmit(event) {
       try {
