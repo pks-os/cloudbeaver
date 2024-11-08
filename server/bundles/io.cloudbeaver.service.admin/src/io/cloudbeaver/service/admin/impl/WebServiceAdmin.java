@@ -344,7 +344,7 @@ public class WebServiceAdmin implements DBWServiceAdmin {
         // Check userId credential.
         // FIXME: It is actually a hack. All crdentials must be passed from client
         if (LocalAuthProvider.PROVIDER_ID.equals(providerId)) {
-            credentials.put(LocalAuthProvider.CRED_USER, userID.toLowerCase());
+            credentials.put(LocalAuthProvider.CRED_USER, userID);
         }
         try {
             webSession.getAdminSecurityController().setUserCredentials(userID, authProvider.getId(), credentials);
