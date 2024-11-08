@@ -64,7 +64,7 @@ export const GrantedUsers: TabContainerPanelComponent<ITeamFormProps> = observer
   return (
     <Loader className={s(styles, { loader: true })} state={[state.state]}>
       {() => (
-        <Container className={s(styles, { box: true })} parent={!!users.resource.values.length} vertical>
+        <Container className={s(styles, { box: true })} parent={!!users.resource.values.length} gap vertical>
           {!users.resource.values.length ? (
             <Group large>{translate('administration_teams_team_granted_users_empty')}</Group>
           ) : (
