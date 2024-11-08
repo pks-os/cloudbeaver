@@ -27,7 +27,7 @@ export const ConnectionShield = observer<PropsWithChildren<IConnectionShieldProp
   const isConnectionReady = getComputed(() => !connecting && connection.data?.connected && connection.loaded && !connection.outdated);
 
   async function handleConnect() {
-    if (connecting || !connection.data || !connectionKey) {
+    if (isConnectionReady || !connection.data || !connectionKey) {
       return;
     }
 
